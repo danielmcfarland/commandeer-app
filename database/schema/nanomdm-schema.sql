@@ -1,6 +1,6 @@
-CREATE TABLE IF NOT EXISTS "migrations"(
-    id integer primary key autoincrement not null,
-    migration varchar not null,
+CREATE TABLE IF NOT EXISTS migrations (
+    id integer primary key auto_increment not null,
+    migration VARCHAR(255) NOT NULL,
     batch integer not null
 );
 
