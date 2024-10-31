@@ -7,23 +7,11 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * The database connection that should be used by the migration.
-     *
-     * @var string | null
-     */
-    protected $connection = null;
-
-    public function __construct()
-    {
-        $this->connection = config('database.default');
-    }
-
-    /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('jobs', function (Blueprint $table) {
+        Schema::connection(config('database.default'))->create('jobs', function (Blueprint $table) {
             $table->id();
             $table->string('queue')->index();
             $table->longText('payload');
@@ -33,7 +21,7 @@ return new class extends Migration
             $table->unsignedInteger('created_at');
         });
 
-        Schema::create('job_batches', function (Blueprint $table) {
+        Schema::connection(config('database.default'))->create('job_batches', function (Blueprint $table) {
             $table->string('id')->primary();
             $table->string('name');
             $table->integer('total_jobs');
@@ -46,7 +34,7 @@ return new class extends Migration
             $table->integer('finished_at')->nullable();
         });
 
-        Schema::create('failed_jobs', function (Blueprint $table) {
+        Schema::connection(config('database.default'))->create('failed_jobs', function (Blueprint $table) {
             $table->id();
             $table->string('uuid')->unique();
             $table->text('connection');
@@ -62,8 +50,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('jobs');
-        Schema::dropIfExists('job_batches');
-        Schema::dropIfExists('failed_jobs');
+        Schema::connection(config('database.default'))->dropIfExists('jobs');
+        Schema::connection(config('database.default'))->dropIfExists('job_batches');
+        Schema::connection(config('database.default'))->dropIfExists('failed_jobs');
     }
 };
