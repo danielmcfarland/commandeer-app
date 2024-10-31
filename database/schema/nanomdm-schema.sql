@@ -1,11 +1,11 @@
-CREATE TABLE migrations (
-   id integer primary key autoincrement not null,
-   migration varchar not null,
-   batch integer not null
+CREATE TABLE IF NOT EXISTS "migrations"(
+    id integer primary key autoincrement not null,
+    migration varchar not null,
+    batch integer not null
 );
 
 
-CREATE TABLE devices (
+CREATE TABLE IF NOT EXISTS "devices" (
     id VARCHAR(255) NOT NULL,
 
     identity_cert TEXT NULL,
@@ -47,7 +47,7 @@ CREATE TABLE devices (
 );
 
 
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS "users" (
     id        VARCHAR(255) NOT NULL,
     device_id VARCHAR(255) NOT NULL,
 
@@ -86,7 +86,7 @@ CREATE TABLE users (
 /* This table represents enrollments which are an amalgamation of
  * both device and user enrollments.
  */
-CREATE TABLE enrollments (
+CREATE TABLE IF NOT EXISTS enrollments (
     -- The enrollment ID of this enrollment
     id        VARCHAR(255) NOT NULL,
     -- The "device" enrollment ID of this enrollment. This will be
@@ -139,7 +139,7 @@ CREATE TABLE enrollments (
  * a device, a result (response), etc. Joining other tables is required
  * for more context.
  */
-CREATE TABLE commands (
+CREATE TABLE IF NOT EXISTS commands (
     command_uuid VARCHAR(127) NOT NULL,
     request_type VARCHAR(63)  NOT NULL,
     -- Raw command Plist
@@ -167,7 +167,7 @@ CREATE TABLE commands (
  * means we lose insight into when NotNows happen once a command is
  * Acknowledged.
  */
-CREATE TABLE command_results (
+CREATE TABLE IF NOT EXISTS command_results (
     id           VARCHAR(255) NOT NULL,
     command_uuid VARCHAR(127) NOT NULL,
     status       VARCHAR(31)  NOT NULL,
@@ -197,7 +197,7 @@ CREATE TABLE command_results (
 );
 
 
-CREATE TABLE enrollment_queue (
+CREATE TABLE IF NOT EXISTS enrollment_queue (
     id           VARCHAR(255) NOT NULL,
     command_uuid VARCHAR(127) NOT NULL,
 
@@ -250,7 +250,7 @@ ORDER BY
     q.created_at;
 
 
-CREATE TABLE push_certs (
+CREATE TABLE IF NOT EXISTS push_certs (
     topic VARCHAR(255) NOT NULL,
 
     cert_pem TEXT NOT NULL,
@@ -275,7 +275,7 @@ CREATE TABLE push_certs (
 );
 
 
-CREATE TABLE cert_auth_associations (
+CREATE TABLE IF NOT EXISTS cert_auth_associations (
     id     VARCHAR(255) NOT NULL,
     sha256 CHAR(64)     NOT NULL,
 
