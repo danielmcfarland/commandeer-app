@@ -57,6 +57,13 @@ return [
             'throw' => false,
         ],
 
+        'scep_certificate' => [
+            'driver' => 'local',
+            'root' => base_path('certificates'),
+            'serve' => false,
+            'throw' => false,
+        ],
+
     ],
 
     /*
