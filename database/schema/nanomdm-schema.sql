@@ -1,3 +1,10 @@
+CREATE TABLE migrations (
+   id integer primary key autoincrement not null,
+   migration varchar not null,
+   batch integer not null
+);
+
+
 CREATE TABLE devices (
     id VARCHAR(255) NOT NULL,
 
