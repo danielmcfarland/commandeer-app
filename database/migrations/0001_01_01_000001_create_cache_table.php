@@ -7,6 +7,18 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
+     * The database connection that should be used by the migration.
+     *
+     * @var string | null
+     */
+    protected $connection = null;
+
+    public function __construct()
+    {
+        $this->connection = config('database.default');
+    }
+
+    /**
      * Run the migrations.
      */
     public function up(): void
