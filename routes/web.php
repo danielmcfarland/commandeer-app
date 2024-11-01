@@ -7,7 +7,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::domain('{account}.commandeer-app.test')->group(function () {
+Route::domain('{account}.' . config('app.domain'))->group(function () {
     Route::any('/{path}', NanomdmController::class)
         ->where('path', '.*');
 });
