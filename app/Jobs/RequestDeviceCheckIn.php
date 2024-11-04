@@ -25,7 +25,7 @@ class RequestDeviceCheckIn implements ShouldQueue
      */
     public function handle(): void
     {
-        $enrollment = Enrollment::find($this->enrollment_id)->sole();
+        $enrollment = Enrollment::find($this->enrollment_id);
 
         $enrollment->requestCheckin();
     }
