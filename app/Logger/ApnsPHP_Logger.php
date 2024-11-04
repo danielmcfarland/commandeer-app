@@ -2,15 +2,15 @@
 
 namespace App\Logger;
 
-use ApnsPHP_Log_Interface;
+use Psr\Log\AbstractLogger as ApnsPHP_Log_Interface;
 use Illuminate\Support\Facades\Log;
 
-class ApnsPHP_Logger implements ApnsPHP_Log_Interface
+class ApnsPHP_Logger extends ApnsPHP_Log_Interface
 {
-    public function log($sMessage)
+    public function log($level, $message, array $context = []): void
     {
         if (config('app.env') != 'production') {
-            Log::info($sMessage);
+            Log::$level(sprintf("%s: %s ApnsPHP[%d]: %s", date('r'), strtoupper($level), getmypid(), trim($message)));
         }
     }
 }

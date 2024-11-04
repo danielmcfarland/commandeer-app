@@ -2,9 +2,8 @@
 
 namespace App\Models;
 
-use ApnsPHP_Abstract;
-use ApnsPHP_Message_Custom;
-use ApnsPHP_Push;
+use ApnsPHP\Message\CustomMessage;
+use ApnsPHP\Push;
 use App\Logger\ApnsPHP_Logger;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -48,17 +47,16 @@ class Enrollment extends Model
     {
         $pushCert = $this->pushCert;
 
-        $tempFilePath = tempnam(sys_get_temp_dir(), 'cert_');
+        $tempFilePath = tempnam(sys_get_temp_dir(), '.pem_cert_');
         file_put_contents($tempFilePath, $pushCert->cert_pem . $pushCert->key_pem);
 
-        $push = new ApnsPHP_Push(
-            ApnsPHP_Abstract::ENVIRONMENT_PRODUCTION,
+        $push = new Push(
+            Push::ENVIRONMENT_PRODUCTION,
             $tempFilePath,
-            ApnsPHP_Abstract::PROTOCOL_HTTP
+            new ApnsPHP_Logger
         );
-        $push->setLogger(new ApnsPHP_Logger);
         $push->connect();
-        $message = new ApnsPHP_Message_Custom($this->token_hex);
+        $message = new CustomMessage($this->token_hex);
 
         $message->setCustomProperty('mdm', $this->push_magic);
 

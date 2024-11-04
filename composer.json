@@ -6,9 +6,9 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
-        "duccio/apns-php": "v2.0.0-alpha",
         "laravel/framework": "^11.9",
         "laravel/tinker": "^2.9",
+        "m2mobi/apns-php": "^3.0.3",
         "spatie/laravel-http-logger": "^1.11"
     },
     "require-dev": {
