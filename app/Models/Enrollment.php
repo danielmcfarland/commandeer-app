@@ -7,6 +7,7 @@ use ApnsPHP\Push;
 use App\Logger\ApnsPHP_Logger;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Enrollment extends Model
 {
@@ -41,6 +42,13 @@ class Enrollment extends Model
     public function pushCert(): BelongsTo
     {
         return $this->belongsTo(PushCert::class, 'topic', 'topic');
+    }
+
+    public function commands(): BelongsToMany
+    {
+        return $this->belongsToMany(Command::class, 'enrollment_queue', 'id', 'command_uuid')
+            ->withPivot('active', 'priority')
+            ->withTimestamps();
     }
 
     public function requestCheckin(): void
