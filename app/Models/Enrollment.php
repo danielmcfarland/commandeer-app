@@ -51,6 +51,11 @@ class Enrollment extends Model
             ->withTimestamps();
     }
 
+    public function device(): BelongsTo
+    {
+        return $this->belongsTo(Device::class, 'device_id', 'id');
+    }
+
     public function requestCheckin(): void
     {
         $pushCert = $this->pushCert;

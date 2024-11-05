@@ -75,7 +75,7 @@ class Command extends Model
         parent::boot();
 
         self::creating(function (Command $command): void {
-            $command->command_uuid = Str::uuid();
+            $command->command_uuid = $command->command_uuid ?: Str::uuid();
 
             if ($command->command) {
                 return;
