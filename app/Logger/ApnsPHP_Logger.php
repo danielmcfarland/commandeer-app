@@ -9,8 +9,8 @@ class ApnsPHP_Logger extends ApnsPHP_Log_Interface
 {
     public function log($level, $message, array $context = []): void
     {
-        if (config('app.env') != 'production') {
+        // if (config('app.env') != 'production') {
             Log::$level(sprintf("%s: %s ApnsPHP[%d]: %s", date('r'), strtoupper($level), getmypid(), trim($message)));
-        }
+        // }
     }
 }
