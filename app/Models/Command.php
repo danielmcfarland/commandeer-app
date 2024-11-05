@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use CFPropertyList\CFArray;
 use CFPropertyList\CFDictionary;
 use CFPropertyList\CFPropertyList;
 use CFPropertyList\CFString;
@@ -73,11 +74,40 @@ class Command extends Model
     {
         parent::boot();
 
-        self::creating(function (Command $command) {
+        self::creating(function (Command $command): void {
             $command->command_uuid = Str::uuid();
+
+            if ($command->command) {
+                return;
+            }
 
             $requestType = new CFDictionary;
             $requestType->add('RequestType', new CFString($command->request_type)); // needs more config
+
+            if ($command->request_type === 'DeviceInformation') {
+                $payload = [
+                    'Queries' => [
+                        'BuildVersion',
+                        'DeviceName',
+                        'Model',
+                        'ModelName',
+                        'OSVersion',
+                        'ProductName',
+                        'SerialNumber',
+                    ],
+                ];
+                foreach ($payload as $key => $value) {
+                    if (is_string($value)) {
+                        $requestType->add($key, new CFString($value));
+                    } elseif (is_array($value)) {
+                        $array = new CFArray;
+                        foreach ($value as $subValue) {
+                            $array->add(new CFString($subValue));
+                        }
+                        $requestType->add($key, $array);
+                    }
+                }
+            }
 
             $commandDictionary = new CFDictionary;
             $commandDictionary->add('Command', $requestType);
