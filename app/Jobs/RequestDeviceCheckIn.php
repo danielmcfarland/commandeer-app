@@ -3,10 +3,11 @@
 namespace App\Jobs;
 
 use App\Models\Enrollment;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 
-class RequestDeviceCheckIn implements ShouldQueue
+class RequestDeviceCheckIn implements ShouldQueue, ShouldBeUnique
 {
     use Queueable;
 
@@ -14,7 +15,7 @@ class RequestDeviceCheckIn implements ShouldQueue
      * Create a new job instance.
      */
     public function __construct(
-        protected string $enrollment_id,
+        protected Enrollment $enrollment,
     )
     {
         //
@@ -25,8 +26,6 @@ class RequestDeviceCheckIn implements ShouldQueue
      */
     public function handle(): void
     {
-        $enrollment = Enrollment::find($this->enrollment_id);
-
-        $enrollment->requestCheckin();
+        $this->enrollment->requestCheckin();
     }
 }

@@ -29,7 +29,7 @@ class DispatchCheckInJobs extends Command
     {
         Enrollment::whereType('Device')->chunk(100, function ($enrollments) {
             foreach ($enrollments as $enrollment) {
-                RequestDeviceCheckIn::dispatch($enrollment->id);
+                RequestDeviceCheckIn::dispatch($enrollment);
             }
         });
     }
