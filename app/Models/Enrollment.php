@@ -48,7 +48,7 @@ class Enrollment extends Model
         $pushCert = $this->pushCert;
 
         $tempFilePath = tempnam(sys_get_temp_dir(), '.pem_cert_');
-        file_put_contents($tempFilePath, $pushCert->cert_pem . $pushCert->key_pem);
+        file_put_contents($tempFilePath, $pushCert->cert_pem . "\n" . $pushCert->key_pem);
 
         $push = new Push(
             Push::ENVIRONMENT_PRODUCTION,
