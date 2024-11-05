@@ -28,4 +28,12 @@ class RequestDeviceCheckIn implements ShouldQueue, ShouldBeUnique
     {
         $this->enrollment->requestCheckin();
     }
+
+    /**
+     * Get the unique ID for the job.
+     */
+    public function uniqueId(): string
+    {
+        return $this->enrollment->id;
+    }
 }
