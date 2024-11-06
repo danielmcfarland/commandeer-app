@@ -7,7 +7,9 @@ use CFPropertyList\CFDictionary;
 use CFPropertyList\CFPropertyList;
 use CFPropertyList\CFString;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
 class Command extends Model
@@ -125,5 +127,10 @@ class Command extends Model
         return $this->belongsToMany(Enrollment::class, 'enrollment_queue', 'command_uuid', 'id')
             ->withPivot('active', 'priority')
             ->withTimestamps();
+    }
+
+    public function commandResults(): HasMany
+    {
+        return $this->hasMany(CommandResult::class, 'command_uuid', 'command_uuid');
     }
 }
