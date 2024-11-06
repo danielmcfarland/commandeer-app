@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Models\Enrollment;
+use App\Models\NanoMdm\Enrollment;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;

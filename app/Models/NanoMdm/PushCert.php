@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\NanoMdm;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Device extends Model
+class PushCert extends Model
 {
     /**
      * The database connection that should be used by the model.
@@ -19,7 +18,7 @@ class Device extends Model
      *
      * @var string
      */
-    protected $primaryKey = 'id';
+    protected $primaryKey = 'topic';
 
     /**
      * The "type" of the primary key ID.
@@ -34,13 +33,4 @@ class Device extends Model
      * @var bool
      */
     public $incrementing = false;
-
-    protected $hidden = [
-        'identity_cert',
-    ];
-
-    public function enrollments(): HasMany
-    {
-        return $this->hasMany(Enrollment::class, 'device_id', 'id');
-    }
 }

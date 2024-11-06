@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\NanoMdm;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class PushCert extends Model
+class CommandResult extends Model
 {
     /**
      * The database connection that should be used by the model.
@@ -18,7 +19,7 @@ class PushCert extends Model
      *
      * @var string
      */
-    protected $primaryKey = 'topic';
+    protected $primaryKey = 'id';
 
     /**
      * The "type" of the primary key ID.
@@ -33,4 +34,9 @@ class PushCert extends Model
      * @var bool
      */
     public $incrementing = false;
+
+    public function command(): BelongsTo
+    {
+        return $this->belongsTo(Command::class, 'command_uuid', 'command_uuid');
+    }
 }

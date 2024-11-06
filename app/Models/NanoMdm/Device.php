@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\NanoMdm;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class CommandResult extends Model
+class Device extends Model
 {
     /**
      * The database connection that should be used by the model.
@@ -35,8 +35,12 @@ class CommandResult extends Model
      */
     public $incrementing = false;
 
-    public function command(): BelongsTo
+    protected $hidden = [
+        'identity_cert',
+    ];
+
+    public function enrollments(): HasMany
     {
-        return $this->belongsTo(Command::class, 'command_uuid', 'command_uuid');
+        return $this->hasMany(Enrollment::class, 'device_id', 'id');
     }
 }

@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Jobs\RequestDeviceCheckIn;
-use App\Models\Enrollment;
+use App\Models\NanoMdm\Enrollment;
 use Illuminate\Console\Command;
 
 class DispatchCheckInJobs extends Command
