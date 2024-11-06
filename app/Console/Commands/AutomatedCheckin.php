@@ -31,7 +31,7 @@ class AutomatedCheckin extends Command
     {
         Device::chunk(100, function ($devices) {
             foreach ($devices as $device) {
-                DeviceInformation::dispatch($device);
+                DeviceInformation::dispatch($device, false);
 
                 $device->enrollments()
                     ->whereType('Device')

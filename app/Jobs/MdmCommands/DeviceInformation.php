@@ -29,7 +29,7 @@ class DeviceInformation implements ShouldQueue, ShouldBeUnique
      */
     public function __construct(
         protected Device $device,
-        protected bool   $isManual = false,
+        protected bool   $isManual = true,
     )
     {
         $this->command_uuid = Str::uuid();
@@ -79,17 +79,30 @@ class DeviceInformation implements ShouldQueue, ShouldBeUnique
             ->whereType('Device')
             ->whereEnabled(true)
             ->each(function (Enrollment $enrollment) {
-                $enrollment->commands()->create(
-                    [
-                        'command_uuid' => $this->command_uuid,
-                        'request_type' => self::REQUEST_TYPE,
-                        'command' => $this->command,
-                    ],
-                    [
-                        'active' => true,
-                        'priority' => 0
-                    ]
-                );
+
+                $totalResultsOfType = $enrollment->commands()
+                    ->where('request_type', 'DeviceInformation')
+                    ->whereHas('commandResults')
+                    ->count();
+
+                $totalRequestOfType = $totalResultsOfType + $enrollment->commands()
+                    ->where('request_type', 'DeviceInformation')
+                    ->doesntHave('commandResults')
+                    ->count();
+
+                if ($totalRequestOfType == $totalResultsOfType) {
+                    $enrollment->commands()->create(
+                        [
+                            'command_uuid' => $this->command_uuid,
+                            'request_type' => self::REQUEST_TYPE,
+                            'command' => $this->command,
+                        ],
+                        [
+                            'active' => true,
+                            'priority' => 0,
+                        ]
+                    );
+                }
 
                 if ($this->isManual) {
                     RequestDeviceCheckIn::dispatch($enrollment);
