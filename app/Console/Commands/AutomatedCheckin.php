@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Jobs\MdmCommands\DeviceInformation;
+use App\Jobs\MdmCommands\InstalledApplicationList;
 use App\Jobs\RequestDeviceCheckIn;
 use App\Models\Device;
 use App\Models\Enrollment;
@@ -32,6 +33,7 @@ class AutomatedCheckin extends Command
         Device::chunk(100, function ($devices) {
             foreach ($devices as $device) {
                 DeviceInformation::dispatch($device, false);
+                InstalledApplicationList::dispatch($device, false);
 
                 $device->enrollments()
                     ->whereType('Device')
