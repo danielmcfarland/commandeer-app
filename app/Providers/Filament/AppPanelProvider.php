@@ -22,9 +22,12 @@ class AppPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
+        $domain = parse_url(config('app.url'), PHP_URL_HOST);
+
         return $panel
             ->default()
             ->id('app')
+            ->domain($domain)
             ->path('')
             ->login()
 //            ->registration()
