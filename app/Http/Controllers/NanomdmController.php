@@ -15,7 +15,7 @@ class NanomdmController extends Controller
         $this->filterHeaders = false;
     }
 
-    public function __invoke(Request $request, string $account, string $path): Response
+    public function __invoke(Request $request, string $account, string $path = ''): Response
     {
         $client = new Client([
             'base_uri' => config('nanomdm.url'),
