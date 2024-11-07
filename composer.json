@@ -11,6 +11,7 @@
         "laravel/tinker": "^2.9",
         "m2mobi/apns-php": "^3.0.3",
         "rodneyrehm/plist": "^2.0",
+        "sentry/sentry-laravel": "^4.10",
         "spatie/laravel-http-logger": "^1.11"
     },
     "require-dev": {
