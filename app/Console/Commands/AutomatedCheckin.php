@@ -32,15 +32,7 @@ class AutomatedCheckin extends Command
     {
         Device::chunk(100, function ($devices) {
             foreach ($devices as $device) {
-                DeviceInformation::dispatch($device, false);
-                InstalledApplicationList::dispatch($device, false);
-
-                $device->enrollments()
-                    ->whereType('Device')
-                    ->whereEnabled(true)
-                    ->each(function (Enrollment $enrollment) {
-                        RequestDeviceCheckIn::dispatch($enrollment);
-                    });
+                $device->automatedCheckin();
             }
         });
     }
