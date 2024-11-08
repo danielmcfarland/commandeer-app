@@ -2,9 +2,13 @@
 
 namespace App\Providers\Filament;
 
+use App\Commandeer\App\Pages\RegisterOrganisation;
+use App\Commandeer\App\Pages\EditOrganisation;
+use App\Models\Organisation;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\MenuItem;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -30,19 +34,26 @@ class AppPanelProvider extends PanelProvider
             ->domain($domain)
             ->path('')
             ->login()
-//            ->registration()
+            ->registration()
+            ->tenant(Organisation::class)
+            ->tenantRegistration(RegisterOrganisation::class)
+            ->tenantProfile(EditOrganisation::class)
+            ->tenantMenuItems([
+                'register' => MenuItem::make(),
+            ])
+            ->tenantRoutePrefix('organisation')
             ->colors([
                 'primary' => Color::Amber,
             ])
-            ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
-            ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
+            ->discoverResources(in: app_path('Commandeer/App/Resources'), for: 'App\\Commandeer\\App\\Resources')
+            ->discoverPages(in: app_path('Commandeer/App/Pages'), for: 'App\\Commandeer\\App\\Pages')
             ->pages([
                 Pages\Dashboard::class,
             ])
-            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
+            ->discoverWidgets(in: app_path('Commandeer/App/Widgets'), for: 'App\\Commandeer\\App\\Widgets')
             ->widgets([
-                Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+//                Widgets\AccountWidget::class,
+//                Widgets\FilamentInfoWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
