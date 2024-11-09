@@ -5,6 +5,7 @@ namespace App\Models\NanoMdm;
 use ApnsPHP\Message\CustomMessage;
 use ApnsPHP\Push;
 use App\Logger\ApnsPHP_Logger;
+use App\Models\Organisation;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -79,5 +80,10 @@ class Enrollment extends Model
         $push->disconnect();
 
         unlink($tempFilePath);
+    }
+
+    public function organisation() {
+        return $this->setConnection('sqlite')
+            ->belongsTo(Organisation::class, 'topic', 'topic');
     }
 }
