@@ -24,16 +24,26 @@ class RegisterOrganisation extends RegisterTenant
         return $form
             ->schema([
                 TextInput::make('name')
-                    ->live()
+                    ->required()
+                    ->live(onBlur: true)
                     ->afterStateUpdated(function (Get $get, Set $set, ?string $operation, ?string $old, ?string $state, ?Organisation $record) {
+                        if ($operation === 'edit') {
+                            return;
+                        }
+
                         $set('slug', Str::slug($state));
                     }),
+
                 TextInput::make('slug')
                     ->required()
                     ->readOnly()
                     ->maxLength(255)
-                    ->unique(Organisation::class, 'slug', fn ($record) => $record),
-                TextInput::make('topic'), // temp
+                    ->rules(['alpha_dash'])
+                    ->unique(Organisation::class, 'slug', fn($record) => $record),
+
+                TextInput::make('topic') // temp
+                    ->required()
+                    ->unique(Organisation::class, 'topic', fn($record) => $record),
             ]);
     }
 
