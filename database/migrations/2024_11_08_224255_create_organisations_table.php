@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('organisations', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('slug')->unique();
-            $table->string('topic')->unique();
+            $table->string('slug')->unique()->index();
+            $table->string('topic')->unique()->index();
             $table->timestamps();
             $table->softDeletes();
         });
