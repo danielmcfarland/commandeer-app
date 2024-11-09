@@ -35,7 +35,7 @@ class AppPanelProvider extends PanelProvider
             ->path('')
             ->login()
             ->registration()
-            ->tenant(Organisation::class)
+            ->tenant(Organisation::class, slugAttribute: 'slug')
             ->tenantRegistration(RegisterOrganisation::class)
             ->tenantProfile(EditOrganisation::class)
             ->tenantMenuItems([
