@@ -84,7 +84,7 @@ class Enrollment extends Model
 
     public function organisation(): BelongsTo
     {
-        return $this->setConnection('sqlite')
+        return $this->setConnection(config('database.default'))
             ->belongsTo(Organisation::class, 'topic', 'topic');
     }
 }
