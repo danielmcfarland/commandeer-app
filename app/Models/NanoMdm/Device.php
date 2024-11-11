@@ -40,6 +40,8 @@ class Device extends Model
 
     protected $hidden = [
         'identity_cert',
+        'authenticate',
+        'token_update',
     ];
 
     public function enrollments(): HasMany
@@ -47,7 +49,7 @@ class Device extends Model
         return $this->hasMany(Enrollment::class, 'device_id', 'id');
     }
 
-    public function automatedCheckin()
+    public function automatedCheckin(): void
     {
         DeviceInformation::dispatch($this, false);
         InstalledApplicationList::dispatch($this, false);
@@ -58,5 +60,18 @@ class Device extends Model
             ->each(function (Enrollment $enrollment) {
                 RequestDeviceCheckIn::dispatch($enrollment);
             });
+    }
+
+    public function enroll(): void
+    {
+        $enrollment = $this->enrollments()
+            ->where('Type', '=', 'Device')
+            ->sole();
+
+        $enrollment->organisation->devices()->firstOrCreate([
+            'device_id' => $this->id,
+            'serial_number' => $this->serial_number,
+            'created_at' => $this->created_at,
+        ]);
     }
 }

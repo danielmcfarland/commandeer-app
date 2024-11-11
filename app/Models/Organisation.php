@@ -30,4 +30,9 @@ class Organisation extends Model
     {
         return $this->belongsTo(Organisation::class, 'id', 'id');
     }
+
+    public function devices(): HasMany
+    {
+        return $this->hasMany(Device::class);
+    }
 }

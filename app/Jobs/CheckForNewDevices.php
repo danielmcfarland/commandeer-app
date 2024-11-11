@@ -25,6 +25,7 @@ class CheckForNewDevices implements ShouldQueue, ShouldBeUnique
     public function handle(): void
     {
         NewDevice::query()->each(function (NewDevice $newDevice) {
+            $newDevice->device->enroll();
             $newDevice->device->automatedCheckin();
             $newDevice->delete();
         });
