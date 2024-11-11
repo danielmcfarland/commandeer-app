@@ -82,7 +82,8 @@ class Enrollment extends Model
         unlink($tempFilePath);
     }
 
-    public function organisation() {
+    public function organisation(): BelongsTo
+    {
         return $this->setConnection('sqlite')
             ->belongsTo(Organisation::class, 'topic', 'topic');
     }
