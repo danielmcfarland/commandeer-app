@@ -25,6 +25,7 @@ class Organisation extends Model
     {
         return $this->hasMany(OrganisationUser::class);
     }
+
     public function organisation(): BelongsTo
     {
         return $this->belongsTo(Organisation::class, 'id', 'id');
