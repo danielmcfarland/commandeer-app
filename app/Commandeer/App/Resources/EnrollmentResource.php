@@ -9,9 +9,8 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class EnrollmentResource extends Resource
 {
@@ -31,21 +30,6 @@ class EnrollmentResource extends Resource
                 Forms\Components\TextInput::make('type')
                     ->required()
                     ->maxLength(31),
-//                Forms\Components\TextInput::make('topic')
-//                    ->required()
-//                    ->maxLength(255),
-//                Forms\Components\TextInput::make('push_magic')
-//                    ->required()
-//                    ->maxLength(127),
-//                Forms\Components\TextInput::make('token_hex')
-//                    ->required()
-//                    ->maxLength(255),
-//                Forms\Components\Toggle::make('enabled')
-//                    ->required(),
-//                Forms\Components\TextInput::make('token_update_tally')
-//                    ->required()
-//                    ->numeric()
-//                    ->default(1),
                 Forms\Components\DateTimePicker::make('last_seen_at')
                     ->required(),
             ]);
@@ -55,27 +39,12 @@ class EnrollmentResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')
-                    ->label('ID')
-                    ->searchable(),
                 Tables\Columns\TextColumn::make('device.device_id')
                     ->searchable(),
-//                Tables\Columns\TextColumn::make('user_id')
-//                    ->searchable(),
                 Tables\Columns\TextColumn::make('type')
                     ->searchable(),
-//                Tables\Columns\TextColumn::make('topic')
-//                    ->searchable(),
-//                Tables\Columns\TextColumn::make('push_magic')
-//                    ->searchable(),
-//                Tables\Columns\TextColumn::make('token_hex')
-//                    ->searchable(),
-//                Tables\Columns\IconColumn::make('enabled')
-//                    ->boolean(),
-//                Tables\Columns\TextColumn::make('token_update_tally')
-//                    ->numeric()
-//                    ->sortable(),
                 Tables\Columns\TextColumn::make('last_seen_at')
+                    ->label('Last Seen At')
                     ->dateTime()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
@@ -88,16 +57,18 @@ class EnrollmentResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                SelectFilter::make('type')
+                    ->options([
+                        'Device' => 'Device',
+                        'User' => 'User',
+                    ])
             ])
+            ->persistFiltersInSession()
+            ->headerActions([])
             ->actions([
                 Tables\Actions\ViewAction::make(),
             ])
-            ->bulkActions([
-//                Tables\Actions\BulkActionGroup::make([
-//                    Tables\Actions\DeleteBulkAction::make(),
-//                ]),
-            ]);
+            ->bulkActions([]);
     }
 
     public static function getRelations(): array

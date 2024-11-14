@@ -40,6 +40,10 @@ class DeviceResource extends Resource
                 Tables\Columns\TextColumn::make('serial_number')
                     ->label('Serial Number')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('last_seen_at')
+                    ->label('Last Seen At')
+                    ->dateTime()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Created At')
                     ->dateTime()
@@ -49,20 +53,18 @@ class DeviceResource extends Resource
             ->filters([
                 //
             ])
+            ->persistFiltersInSession()
+            ->headerActions([])
             ->actions([
                 Tables\Actions\ViewAction::make(),
             ])
-            ->bulkActions([
-//                Tables\Actions\BulkActionGroup::make([
-//                    Tables\Actions\DeleteBulkAction::make(),
-//                ]),
-            ]);
+            ->bulkActions([]);
     }
 
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\EnrollmentsRelationManager::class,
         ];
     }
 
