@@ -5,6 +5,7 @@ namespace App\Models\NanoMdm;
 use ApnsPHP\Message\CustomMessage;
 use ApnsPHP\Push;
 use App\Logger\ApnsPHP_Logger;
+use App\Models\Device;
 use App\Models\Organisation;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -82,6 +83,16 @@ class Enrollment extends Model
         unlink($tempFilePath);
     }
 
+    public function updateOrCreateEnrollment(): void
+    {
+        $this->organisation->enrollments()->updateOrCreate([
+            'enrollment_id' => $this->id,
+            'device_id' => \App\Models\Device::where('device_id', '=', $this->device_id)->sole()->device_id,
+            'type' => $this->type,
+        ], [
+            'last_seen_at' => $this->last_seen_at,
+        ]);
+    }
     public function organisation(): BelongsTo
     {
         return $this->setConnection(config('database.default'))

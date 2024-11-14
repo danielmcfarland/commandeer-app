@@ -35,4 +35,9 @@ class Organisation extends Model
     {
         return $this->hasMany(Device::class);
     }
+
+    public function enrollments(): HasMany
+    {
+        return $this->hasMany(Enrollment::class);
+    }
 }
