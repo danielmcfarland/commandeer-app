@@ -4,6 +4,7 @@ namespace App\Models\NanoMdm;
 
 use App\Jobs\MdmCommands\DeviceInformation;
 use App\Jobs\MdmCommands\InstalledApplicationList;
+use App\Jobs\MdmCommands\ProfileList;
 use App\Jobs\RequestDeviceCheckIn;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -53,6 +54,7 @@ class Device extends Model
     {
         DeviceInformation::dispatch($this, false);
         InstalledApplicationList::dispatch($this, false);
+        ProfileList::dispatch($this, false);
 
         $this->enrollments()
             ->whereType('Device')

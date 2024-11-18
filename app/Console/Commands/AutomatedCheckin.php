@@ -2,11 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs\MdmCommands\DeviceInformation;
-use App\Jobs\MdmCommands\InstalledApplicationList;
-use App\Jobs\RequestDeviceCheckIn;
 use App\Models\NanoMdm\Device;
-use App\Models\NanoMdm\Enrollment;
 use Illuminate\Console\Command;
 
 class AutomatedCheckin extends Command
