@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Device extends Model
@@ -22,6 +23,19 @@ class Device extends Model
     public function enrollments(): HasMany
     {
         return $this->hasMany(Enrollment::class, 'device_id', 'device_id');
+    }
+
+    public function commands(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            related: Command::class,
+            through: Enrollment::class,
+            firstKey: 'device_id',
+            secondKey: 'enrollment_id',
+            localKey: 'device_id',
+            secondLocalKey: 'id',
+        );
+//        return $this->enrollments->commands();
     }
 
     protected function lastSeenAt(): Attribute

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Enrollment extends Model
@@ -20,5 +21,10 @@ class Enrollment extends Model
     public function device(): BelongsTo
     {
         return $this->belongsTo(Device::class, 'device_id', 'device_id');
+    }
+
+    public function commands(): HasMany
+    {
+        return $this->hasMany(Command::class);
     }
 }
