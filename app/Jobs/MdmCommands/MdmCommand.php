@@ -3,6 +3,7 @@
 namespace App\Jobs\MdmCommands;
 
 use App\Jobs\RequestDeviceCheckIn;
+use App\Models\Command;
 use App\Models\NanoMdm\Device;
 use App\Models\NanoMdm\Enrollment;
 use CFPropertyList\CFArray;
@@ -82,7 +83,7 @@ abstract class MdmCommand implements ShouldQueue, ShouldBeUnique
                         ->count();
 
                 if ($totalRequestOfType == $totalResultsOfType) {
-                    $enrollment->commands()->create(
+                    $mc = $enrollment->commands()->create(
                         [
                             'command_uuid' => $this->command_uuid,
                             'request_type' => $this->request_name,
@@ -91,6 +92,22 @@ abstract class MdmCommand implements ShouldQueue, ShouldBeUnique
                         [
                             'active' => true,
                             'priority' => 0,
+                        ]
+                    );
+
+                    $e = Enrollment::where('enrollment_id', '=', $enrollment->id)->sole();
+                    Command::updateOrCreate(
+                        [
+                            'command_uuid' => $mc->command_uuid
+                        ],
+                        [
+                            'organisation_id' => $e->organisation_id,
+                            'enrollment_id' => $e->id,
+                            'type' => $mc->request_type,
+                            // 'payload' => '',
+                            'payload_raw' => $mc->command,
+                            'created_at' => $mc->created_at,
+                            'updated_at' => $mc->updated_at
                         ]
                     );
                 }

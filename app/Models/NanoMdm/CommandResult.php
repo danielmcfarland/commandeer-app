@@ -2,6 +2,8 @@
 
 namespace App\Models\NanoMdm;
 
+use App\Models\Command;
+use App\Models\NanoMdm\Command as MdmCommand;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -37,6 +39,19 @@ class CommandResult extends Model
 
     public function command(): BelongsTo
     {
-        return $this->belongsTo(Command::class, 'command_uuid', 'command_uuid');
+        return $this->belongsTo(MdmCommand::class, 'command_uuid', 'command_uuid');
+    }
+
+    public function addResult(): void
+    {
+        $c = Command::where('command_uuid', $this->command_uuid)->sole();
+
+        $c->results()->create([
+            'organisation_id' => $c->organisation_id,
+            'status' => $this->status,
+            'response_raw' => $this->result,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at
+        ]);
     }
 }
