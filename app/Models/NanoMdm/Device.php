@@ -50,11 +50,11 @@ class Device extends Model
         return $this->hasMany(Enrollment::class, 'device_id', 'id');
     }
 
-    public function automatedCheckin(): void
+    public function automatedCheckin(bool $runCommands = true): void
     {
-        DeviceInformation::dispatch($this, false);
-        InstalledApplicationList::dispatch($this, false);
-        ProfileList::dispatch($this, false);
+        DeviceInformation::dispatchIf($runCommands, $this, false);
+        InstalledApplicationList::dispatchIf($runCommands, $this, false);
+        ProfileList::dispatchIf($runCommands, $this, false);
 
         $this->enrollments()
             ->whereType('Device')
