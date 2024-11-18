@@ -6,6 +6,7 @@ use App\Jobs\RequestDeviceCheckIn;
 use App\Models\Command;
 use App\Models\NanoMdm\Device;
 use App\Models\NanoMdm\Enrollment;
+use App\Models\NanoMdm\Enrollment as MdmEnrollment;
 use CFPropertyList\CFArray;
 use CFPropertyList\CFDictionary;
 use CFPropertyList\CFPropertyList;
@@ -70,7 +71,7 @@ abstract class MdmCommand implements ShouldQueue, ShouldBeUnique
         $this->device->enrollments()
             ->whereType('Device')
             ->whereEnabled(true)
-            ->each(function (Enrollment $enrollment) {
+            ->each(function (MdmEnrollment $enrollment) {
 
                 $totalResultsOfType = $enrollment->commands()
                     ->where('request_type', $this->request_name)
