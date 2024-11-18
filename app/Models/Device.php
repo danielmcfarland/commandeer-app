@@ -35,7 +35,6 @@ class Device extends Model
             localKey: 'device_id',
             secondLocalKey: 'id',
         );
-//        return $this->enrollments->commands();
     }
 
     protected function lastSeenAt(): Attribute
