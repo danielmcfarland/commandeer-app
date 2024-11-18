@@ -4,8 +4,8 @@ namespace App\Jobs\MdmCommands;
 
 use App\Jobs\RequestDeviceCheckIn;
 use App\Models\Command;
+use App\Models\Enrollment;
 use App\Models\NanoMdm\Device;
-use App\Models\NanoMdm\Enrollment;
 use App\Models\NanoMdm\Enrollment as MdmEnrollment;
 use CFPropertyList\CFArray;
 use CFPropertyList\CFDictionary;
