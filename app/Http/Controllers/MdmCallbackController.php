@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\NanoMdm\Command;
+use App\Models\NanoMdm\Device;
 use App\Models\NanoMdm\Enrollment;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -15,9 +16,10 @@ class MdmCallbackController extends Controller
         if ($request->has('topic')) {
             switch ($request->get('topic')) {
                 case 'mdm.Connect':
-                    return $this->acknowledgeEvent($request->get('acknowledge_event'));
-                case 'mdm.Authenticate':
+                    return $this->connect($request->get('acknowledge_event'));
                 case 'mdm.TokenUpdate':
+                    return $this->tokenUpdate($request->get('checkin_event'));
+                case 'mdm.Authenticate':
                 case 'mdm.CheckOut':
                     return $this->checkinEvent();
             }
@@ -28,7 +30,7 @@ class MdmCallbackController extends Controller
             ->json();
     }
 
-    private function acknowledgeEvent(array $acknowledgeEvent): JsonResponse
+    private function connect(array $acknowledgeEvent): JsonResponse
     {
         if (array_key_exists('command_uuid', $acknowledgeEvent)) {
             $commandResult = Command::find($acknowledgeEvent['command_uuid'])
@@ -43,6 +45,18 @@ class MdmCallbackController extends Controller
             $enrollment = Enrollment::find($acknowledgeEvent['udid']);
 
             $enrollment->updateOrCreateEnrollment();
+        }
+
+        return response()
+            ->json();
+    }
+
+    private function tokenUpdate(array $checkinEvent): JsonResponse
+    {
+        if (array_key_exists('udid', $checkinEvent)) {
+            $device = Device::find($checkinEvent['udid']);
+            $device->enroll();
+            $device->automatedCheckin();
         }
 
         return response()
