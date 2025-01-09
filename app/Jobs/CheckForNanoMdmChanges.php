@@ -37,9 +37,9 @@ class CheckForNanoMdmChanges implements ShouldQueue, ShouldBeUnique
             $enrollmentUpdate->delete();
         });
 
-        CommandResultUpdate::query()->each(function (CommandResultUpdate $commandResultUpdate) {
-            $commandResultUpdate->commandResult->addResult();
-            $commandResultUpdate->delete();
-        });
+//        CommandResultUpdate::query()->each(function (CommandResultUpdate $commandResultUpdate) {
+//            $commandResultUpdate->commandResult->addResult();
+//            $commandResultUpdate->delete();
+//        });
     }
 }
