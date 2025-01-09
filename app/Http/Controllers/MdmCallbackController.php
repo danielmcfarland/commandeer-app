@@ -56,7 +56,6 @@ class MdmCallbackController extends Controller
         if (array_key_exists('udid', $checkinEvent)) {
             $device = Device::find($checkinEvent['udid']);
             $device->enroll();
-            $device->automatedCheckin();
         }
 
         return response()
