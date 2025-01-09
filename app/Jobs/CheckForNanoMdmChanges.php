@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use App\Models\NanoMdm\EnrollmentUpdate;
 use App\Models\NanoMdm\NewDevice;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -30,10 +29,5 @@ class CheckForNanoMdmChanges implements ShouldQueue, ShouldBeUnique
             $newDevice->device->automatedCheckin();
             $newDevice->delete();
         });
-
-//        EnrollmentUpdate::query()->each(function (EnrollmentUpdate $enrollmentUpdate) {
-//            $enrollmentUpdate->enrollment->updateOrCreateEnrollment();
-//            $enrollmentUpdate->delete();
-//        });
     }
 }
