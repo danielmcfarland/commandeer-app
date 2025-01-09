@@ -29,12 +29,14 @@ class MdmCallbackController extends Controller
 
     private function acknowledgeEvent(array $acknowledgeEvent): JsonResponse
     {
-        $commandResult = Command::find($acknowledgeEvent['command_uuid'])
-            ->commandResults()
-            ->latest()
-            ->first();
+        if (array_key_exists('command_uuid', $acknowledgeEvent)) {
+            $commandResult = Command::find($acknowledgeEvent['command_uuid'])
+                ->commandResults()
+                ->latest()
+                ->first();
 
-        $commandResult->addResult();
+            $commandResult->addResult();
+        }
 
         return response()
             ->json();
