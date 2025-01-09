@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\NanoMdm\Command;
+use App\Models\NanoMdm\Enrollment;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,6 +37,12 @@ class MdmCallbackController extends Controller
                 ->first();
 
             $commandResult->addResult();
+        }
+
+        if (array_key_exists('udid', $acknowledgeEvent)) {
+            $enrollment = Enrollment::find($acknowledgeEvent['udid']);
+
+            $enrollment->updateOrCreateEnrollment();
         }
 
         return response()
