@@ -76,6 +76,6 @@ class Device extends Model
             'created_at' => $this->created_at,
         ]);
 
-        $this->automatedCheckin();
+        $this->fresh()->automatedCheckin();
     }
 }
