@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Device;
 use App\Models\NanoMdm\Command;
-use App\Models\NanoMdm\Device;
+use App\Models\NanoMdm\Device as NanoMdmDevice;
 use App\Models\NanoMdm\Enrollment;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -20,8 +21,9 @@ class MdmCallbackController extends Controller
                 case 'mdm.TokenUpdate':
                     return $this->tokenUpdate($request->get('checkin_event'));
                 case 'mdm.Authenticate':
+                    return $this->authenticate();
                 case 'mdm.CheckOut':
-                    return $this->checkinEvent();
+                    return $this->checkOut();
             }
         }
 
@@ -54,7 +56,7 @@ class MdmCallbackController extends Controller
     private function tokenUpdate(array $checkinEvent): JsonResponse
     {
         if (array_key_exists('udid', $checkinEvent)) {
-            $device = Device::find($checkinEvent['udid']);
+            $device = NanoMdmDevice::find($checkinEvent['udid']);
             $device->enroll();
         }
 
@@ -62,7 +64,21 @@ class MdmCallbackController extends Controller
             ->json();
     }
 
-    private function checkinEvent(): JsonResponse
+    private function checkOut(array $checkOutEvent): JsonResponse
+    {
+        if (array_key_exists('udid', $checkOutEvent)) {
+            Device::where('device_id', $checkOutEvent['udid'])
+                ->each(function (Device $device) {
+                    $device->enrollments()->delete();
+                    $device->delete();
+                });
+        }
+
+        return response()
+            ->json();
+    }
+
+    private function authenticate(): JsonResponse
     {
         return response()
             ->json();
