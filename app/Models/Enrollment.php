@@ -27,4 +27,9 @@ class Enrollment extends Model
     {
         return $this->hasMany(Command::class);
     }
+
+    public function deviceInformation(): HasMany
+    {
+        return $this->hasMany(DeviceInformation::class);
+    }
 }
