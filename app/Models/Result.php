@@ -53,12 +53,15 @@ class Result extends Model
             return;
         }
 
-        $enrollment = $result->enrollment;
         foreach ($result->response['QueryResponses'] as $key => $value) {
-            $enrollment->deviceInformation()->updateOrCreate(
+            if (!$result->enrollment) {
+                continue;
+            }
+
+            $result->enrollment->deviceInformation()->updateOrCreate(
                 [
                     'key' => $key,
-                    'organisation_id' => $enrollment->organisation_id,
+                    'organisation_id' => $result->enrollment->organisation_id,
                 ],
                 [
                     'value' => $value,
