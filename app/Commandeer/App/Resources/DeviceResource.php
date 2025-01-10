@@ -43,7 +43,8 @@ class DeviceResource extends Resource
                 Tables\Columns\TextColumn::make('last_seen_at')
                     ->label('Last Seen At')
                     ->dateTime(),
-//                    ->sortable(),
+                Tables\Columns\TextColumn::make('device_name')
+                    ->label('Device Name'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Created At')
                     ->dateTime()

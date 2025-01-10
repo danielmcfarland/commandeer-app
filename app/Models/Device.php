@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\NanoMdm\Device as MdmDevice;
+use Exception;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -25,6 +26,18 @@ class Device extends Model
     public function enrollments(): HasMany
     {
         return $this->hasMany(Enrollment::class, 'device_id', 'device_id');
+    }
+
+    public function deviceInformation(): HasMany
+    {
+        try {
+            return $this->enrollments()
+                ->where('type', 'Device')
+                ->sole()
+                ->deviceInformation();
+        } catch (Exception) {
+            return new HasMany($this->newQuery(), $this, '', '');
+        }
     }
 
     public function commands(): HasManyThrough
@@ -53,5 +66,24 @@ class Device extends Model
     {
         return $this->setConnection('nanomdm')
             ->hasOne(MdmDevice::class, 'id', 'device_id');
+    }
+
+    protected function deviceName(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                try {
+                    $enrollment = $this
+                        ->enrollments()
+                        ->where('type', 'Device')
+                        ->sole();
+
+                    return $enrollment ? $enrollment->deviceInformation()->where('key', 'DeviceName')->sole()->value : '-';
+                } catch (Exception) {
+                    return '-';
+                }
+
+            },
+        );
     }
 }
