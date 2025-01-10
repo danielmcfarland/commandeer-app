@@ -75,5 +75,7 @@ class Device extends Model
             'serial_number' => $this->serial_number,
             'created_at' => $this->created_at,
         ]);
+
+        $this->automatedCheckin(false);
     }
 }
