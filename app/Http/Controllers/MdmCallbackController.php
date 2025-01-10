@@ -23,7 +23,7 @@ class MdmCallbackController extends Controller
                 case 'mdm.Authenticate':
                     return $this->authenticate();
                 case 'mdm.CheckOut':
-                    return $this->checkOut();
+                    return $this->checkOut($request->get('checkin_event'));
             }
         }
 
