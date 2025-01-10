@@ -44,16 +44,18 @@ class Result extends Model
 
     public function process(): void
     {
-        if ($this->command->type !== 'DeviceInformation') {
+        $result = $this->fresh();
+
+        if (!$result->command || $result->command->type !== 'DeviceInformation') {
             return; // not handling non 'DeviceInformation' results yet
         }
 
-        if (!array_key_exists('QueryResponses', $this->response)) {
+        if (!array_key_exists('QueryResponses', $result->response)) {
             return;
         }
 
-        $enrollment = $this->enrollment;
-        foreach ($this->response['QueryResponses'] as $key => $value) {
+        $enrollment = $result->enrollment;
+        foreach ($result->response['QueryResponses'] as $key => $value) {
             $enrollment->deviceInformation()->updateOrCreate(
                 [
                     'key' => $key,
