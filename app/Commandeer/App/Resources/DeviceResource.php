@@ -10,6 +10,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class DeviceResource extends Resource
 {
@@ -42,15 +43,28 @@ class DeviceResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('last_seen_at')
                     ->label('Last Seen At')
-                    ->dateTime(),
+                    ->dateTime()
+                    ->sortable(query: function (Builder $query, string $direction) {
+                        return $query->join('enrollments', 'enrollments.device_id', '=', 'devices.device_id')
+                            ->where('enrollments.type', '=', 'Device')
+                            ->orderBy('enrollments.last_seen_at', $direction);
+                    }),
                 Tables\Columns\TextColumn::make('device_name')
-                    ->label('Device Name'),
+                    ->label('Device Name')
+                    ->sortable(query: function (Builder $query, string $direction) {
+                        return $query->join('enrollments', 'enrollments.device_id', '=', 'devices.device_id')
+                            ->join('device_information', 'device_information.enrollment_id', '=', 'enrollments.id')
+                            ->where('enrollments.type', '=', 'Device')
+                            ->where('device_information.key', '=', 'DeviceName')
+                            ->orderBy('device_information.value', $direction);
+                    }),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Created At')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('last_seen_at', 'desc')
             ->filters([
                 //
             ])
