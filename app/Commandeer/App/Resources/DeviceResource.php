@@ -3,10 +3,12 @@
 namespace App\Commandeer\App\Resources;
 
 use App\Commandeer\App\Resources\DeviceResource\Pages;
-use App\Commandeer\App\Resources\DeviceResource\RelationManagers;
 use App\Models\Device;
 use Filament\Forms;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
+use Filament\Infolists;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -28,6 +30,20 @@ class DeviceResource extends Resource
                 Forms\Components\TextInput::make('serial_number')
                     ->label('Serial Number')
                     ->maxLength(127),
+
+                Section::make('Device Information')
+                    ->id('main-card')
+//                    ->heading('')
+                    ->schema([
+                        Forms\Components\KeyValue::make('deviceInformation'),
+                        Forms\Components\TextInput::make('device_name')
+                            ->label('Device Name'),
+                    ]),
+
+
+                Forms\Components\TextInput::make('device_name')
+                    ->label('Device Name')
+//                    ->maxLength(127),
             ]);
     }
 
@@ -64,7 +80,7 @@ class DeviceResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->defaultSort('last_seen_at', 'desc')
+            ->defaultSort('created_at', 'desc')
             ->filters([
                 //
             ])
@@ -76,10 +92,38 @@ class DeviceResource extends Resource
             ->bulkActions([]);
     }
 
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist->schema([
+            Infolists\Components\Section::make('Device Info')
+                ->columns(3)
+                ->schema([
+                    Infolists\Components\TextEntry::make('device_name')
+                        ->label('Device Name'),
+                    Infolists\Components\TextEntry::make('os_version')
+                        ->label('OS Version'),
+                    Infolists\Components\TextEntry::make('build_version')
+                        ->label('Build Version'),
+                    Infolists\Components\TextEntry::make('model_name')
+                        ->label('Model Name'),
+                    Infolists\Components\TextEntry::make('model')
+                        ->label('Model Identifier'),
+                    Infolists\Components\TextEntry::make('product_name')
+                        ->label('Product Name'),
+                    Infolists\Components\TextEntry::make('serial_number')
+                        ->label('Serial Number'),
+                    Infolists\Components\TextEntry::make('udid')
+                        ->label('UDID'),
+                    Infolists\Components\TextEntry::make('last_seen_at')
+                        ->label('Last Seen At'),
+                ])
+        ]);
+    }
+
     public static function getRelations(): array
     {
         return [
-            RelationManagers\EnrollmentsRelationManager::class,
+
         ];
     }
 

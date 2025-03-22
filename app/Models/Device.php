@@ -18,6 +18,17 @@ class Device extends Model
 
     protected $guarded = [];
 
+    protected $deviceInfoKeys = [
+        'build_version' => 'BuildVersion',
+        'device_name' => 'DeviceName',
+        'model' => 'Model',
+        'model_name' => 'ModelName',
+        'os_version' => 'OSVersion',
+        'product_name' => 'ProductName',
+        'serial_number' => 'SerialNumber',
+        'udid' => 'UDID',
+    ];
+
     public function organisation(): BelongsTo
     {
         return $this->belongsTo(Organisation::class);
@@ -68,22 +79,21 @@ class Device extends Model
             ->hasOne(MdmDevice::class, 'id', 'device_id');
     }
 
-    protected function deviceName(): Attribute
+    public function getAttribute($key)
     {
-        return Attribute::make(
-            get: function () {
-                try {
-                    $enrollment = $this
-                        ->enrollments()
-                        ->where('type', 'Device')
-                        ->sole();
+        $attribute = parent::getAttribute($key);
 
-                    return $enrollment ? $enrollment->deviceInformation()->where('key', 'DeviceName')->sole()->value : '-';
-                } catch (Exception) {
-                    return '-';
-                }
+        if (in_array($key, array_keys($this->deviceInfoKeys))) {
+            try {
+                return $this->deviceInformation()
+                    ->where('key', $this->deviceInfoKeys[$key])
+                    ->sole()
+                    ->value;
+            } catch (Exception) {
+                return '-';
+            }
+        }
 
-            },
-        );
+        return $attribute;
     }
 }
