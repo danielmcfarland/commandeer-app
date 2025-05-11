@@ -13,6 +13,10 @@ class Enrollment extends Model
 
     protected $guarded = [];
 
+    protected $casts = [
+        'last_seen_at' => 'datetime',
+    ];
+
     public function organisation(): BelongsTo
     {
         return $this->belongsTo(Organisation::class);
