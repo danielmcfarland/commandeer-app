@@ -15,6 +15,7 @@ class MdmCallbackController extends Controller
 {
     public function __invoke(Request $request): JsonResponse
     {
+        Log::debug('__invoke: ', $request->toArray());
         if ($request->has('topic')) {
             Log::debug('__invoke: ' . $request->get('topic'));
             switch ($request->get('topic')) {
