@@ -17,9 +17,8 @@ Route::domain('{account}.' . config('app.domain'))
         ]);
     });
 
-Route::domain('{account}.' . config('app.domain'))
+Route::domain(config('app.domain'))
     ->prefix('mdm')
-    ->name('mdm')
     ->group(function () {
         Route::any('/', MdmCallbackController::class)
             ->name('.callback')
@@ -32,7 +31,9 @@ Route::domain('{account}.' . config('app.domain'))
         })->name('.dep_anchor_certs_url');
     });
 
-Route::prefix('mdm')
+Route::domain('{account}.' . config('app.domain'))
+    ->prefix('mdm')
+    ->name('mdm')
     ->group(function () {
         Route::any('/', MdmCallbackController::class)
             ->name('.callback')
