@@ -19,7 +19,7 @@ Route::domain('{account}.' . config('app.domain'))
 
 Route::prefix('mdm')
     ->group(function () {
-        Route::any('/', MdmCallbackController::class)
+        Route::post('/', MdmCallbackController::class)
             ->name('.callback')
             ->withoutMiddleware([
                 ValidateCsrfToken::class,
@@ -34,7 +34,7 @@ Route::domain('{account}.' . config('app.domain'))
     ->prefix('mdm')
     ->name('mdm')
     ->group(function () {
-        Route::any('/', MdmCallbackController::class)
+        Route::post('/', MdmCallbackController::class)
             ->name('.callback')
             ->withoutMiddleware([
                 ValidateCsrfToken::class,
