@@ -32,6 +32,19 @@ Route::domain('{account}.' . config('app.domain'))
         })->name('.dep_anchor_certs_url');
     });
 
+Route::prefix('mdm')
+    ->group(function () {
+        Route::any('/', MdmCallbackController::class)
+            ->name('.callback')
+            ->withoutMiddleware([
+                ValidateCsrfToken::class,
+            ]);
+
+        Route::get('/dep_anchor_certs_url', function () {
+            return response()->json();
+        })->name('.dep_anchor_certs_url');
+    });
+
 Route::domain('{account}.' . config('app.domain'))->group(function () {
     Route::any('/{path}', NanomdmController::class)
         ->where('path', '.*');

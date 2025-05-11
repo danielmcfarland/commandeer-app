@@ -8,16 +8,13 @@ use App\Models\NanoMdm\Device as NanoMdmDevice;
 use App\Models\NanoMdm\Enrollment;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 class MdmCallbackController extends Controller
 {
     public function __invoke(Request $request): JsonResponse
     {
-        Log::debug('__invoke: ', $request->toArray());
         if ($request->has('topic')) {
-            Log::debug('__invoke: ' . $request->get('topic'));
             switch ($request->get('topic')) {
                 case 'mdm.Connect':
                     return $this->connect($request->get('acknowledge_event'));
@@ -37,7 +34,6 @@ class MdmCallbackController extends Controller
 
     private function connect(array $acknowledgeEvent): JsonResponse
     {
-        Log::debug('connect', $acknowledgeEvent);
         if (array_key_exists('command_uuid', $acknowledgeEvent)) {
             $commandResult = Command::find($acknowledgeEvent['command_uuid'])
                 ->commandResults()

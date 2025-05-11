@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Log;
 
 class NanomdmController extends Controller
 {
@@ -18,7 +17,6 @@ class NanomdmController extends Controller
 
     public function __invoke(Request $request, string $account, string $path = ''): Response
     {
-        Log::debug('__invoke: ' . 'NanomdmController');
         $client = new Client([
             'base_uri' => config('nanomdm.url'),
             'timeout' => 10.0,
