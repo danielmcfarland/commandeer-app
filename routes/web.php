@@ -17,7 +17,8 @@ Route::domain('{account}.' . config('app.domain'))
         ]);
     });
 
-Route::prefix('mdm')
+Route::domain(config('app.domain'))
+    ->prefix('mdm')
     ->group(function () {
         Route::post('/', MdmCallbackController::class)
             ->name('.callback')
