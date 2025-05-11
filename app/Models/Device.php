@@ -67,7 +67,7 @@ class Device extends Model
     {
         return Attribute::make(
             get: function () {
-                $enrollment = $this->enrollments()->latest('last_seen_at')->first();
+                $enrollment = $this->enrollments()->withTrashed()->latest('last_seen_at')->first();
                 return $enrollment ? $enrollment->last_seen_at : null;
             },
         );
