@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\MdmCallbackController;
-use App\Http\Controllers\NanomdmController;
 use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
 use Illuminate\Support\Facades\Route;
 
@@ -35,18 +34,13 @@ Route::domain('{account}.' . config('app.domain'))
     ->prefix('mdm')
     ->name('mdm')
     ->group(function () {
-        Route::post('/', MdmCallbackController::class)
-            ->name('.callback')
-            ->withoutMiddleware([
-                ValidateCsrfToken::class,
-            ]);
+//        Route::post('/', MdmCallbackController::class)
+//            ->name('.callback')
+//            ->withoutMiddleware([
+//                ValidateCsrfToken::class,
+//            ]);
 
         Route::get('/dep_anchor_certs_url', function () {
             return response()->json();
         })->name('.dep_anchor_certs_url');
     });
-
-Route::domain('{account}.' . config('app.domain'))->group(function () {
-    Route::any('/{path}', NanomdmController::class)
-        ->where('path', '.*');
-});
